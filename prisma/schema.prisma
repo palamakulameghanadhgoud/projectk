@@ -1,0 +1,61 @@
+// DAA Platform - PostgreSQL schema via Prisma
+// Extensible schema for users, saved visualizations, and session history
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("student") // "teacher" | "student"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  savedVisualizations SavedVisualization[]
+  sessionHistory     SessionHistory[]
+}
+
+model SavedVisualization {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  algorithmId String   // e.g. "merge-sort", "binary-tree"
+  title       String?
+  config      Json     // AlgorithmConfig snapshot
+  thumbnail   String?  // optional base64 or URL
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([algorithmId])
+}
+
+model AlgorithmConfiguration {
+  id          String   @id @default(cuid())
+  algorithmId String
+  name        String?
+  config      Json     // input params, options
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([algorithmId])
+}
+
+model SessionHistory {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  algorithmId String
+  config      Json?
+  stepsViewed Int      @default(0)
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([algorithmId])
+}
