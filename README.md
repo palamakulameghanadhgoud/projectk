@@ -1,4 +1,4 @@
-# DAA — Design & Analysis of Algorithms
+# PROJECT K
 
 Production-ready web platform for teaching Design and Analysis of Algorithms using interactive 3D visualizations and algorithm simulations.
 
