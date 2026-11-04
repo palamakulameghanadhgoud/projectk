@@ -95,6 +95,6 @@ See `docs/architecture.md` for more detail.
 - Middleware at `/api/*` is the placeholder for rate limiting (e.g. Upstash).
 
 ## License
-
+open source
 Private / educational use.
-thankyou
+thankyou.
